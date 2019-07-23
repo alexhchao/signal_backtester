@@ -10,6 +10,8 @@ pd.options.display.max_rows = 15
 pd.options.display.max_columns = 15
 pd.set_option("display.width",150)
 
+from signalUnivariateStudy.SignalUnivariateStudy import SignalUnivariateStudy
+
 print('hello')
 
 os.getcwd()
@@ -31,11 +33,20 @@ sig = SignalUnivariateStudy(data_df = df,
                             neutralizer_column = 'sector',
                             order = 'asc',
                             n = 5)
-sig
+
+sharpes = list(sig.stats.loc['sharpe'].values)
+
+mom_q5_sharpes = [0.4335993828993728, 0.629807334232841, 0.736147030627279,
+       0.7806338800155603, 0.7417751759348701, 0.08860064205960581]
+
+
+assert(sharpes == mom_q5_sharpes)
 
 sig.data_df.groupby(['date','sector']).vol_SN.describe()
 
 sig.wealth.plot()
+
+sig
 
 df['fwd_returns'].mean()
 
