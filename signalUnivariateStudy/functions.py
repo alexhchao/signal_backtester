@@ -3,6 +3,92 @@ import pandas as pd
 import numpy as np
 import os
 import sys
+from scipy.stats import zscore
+from scipy.stats import norm
+
+def check_if_matrix_has_nans(m):
+    return np.any(np.isnan(m))
+
+
+def normalize(x):
+    """
+    percentile rank than inverse normal dist
+
+    Parameters
+    ----------
+    x
+    Returns
+    -------
+    """
+    ranks = x.rank()
+    _x = ranks / (1 + max(ranks.dropna()))  # na messes things up
+    return pd.Series(norm.ppf(_x))
+
+
+def is_binary(col):
+    """
+    Parameters
+    ----------
+    col
+    Returns
+    -------
+    """
+    if not isinstance(col, pd.Series):
+        raise ValueError("column is not a series! please try again")
+
+    return set(col.unique()) == {0, 1}
+
+
+def is_not_binary(col):
+    """
+    Parameters
+    ----------
+    col
+    Returns
+    -------
+    """
+    if not isinstance(col, pd.Series):
+        raise ValueError("column is not a series! please try again")
+
+    return not set(col.unique()) == {0, 1}
+
+#def zscore(x):
+#    """
+#
+#    Returns
+#    -------
+#
+#    """
+#    return (x - x.mean())/x.std()
+
+def rolling_window(dates,
+                   window_size,
+                   start = 0,
+                   end_offset = None,
+                   jump = 1):
+    """
+    
+    Parameters
+    ----------
+    dates
+    window_size
+    start
+    end_offset
+    jump
+
+    Returns
+    -------
+    
+    """
+    if end_offset is None:
+        end = len(dates) - window_size
+    else:
+        end = len(dates) - (window_size + end_offset)
+
+    while start <= end:
+        yield dates[start:start+window_size]
+        start += jump
+
 
 
 def percentile_rank(x):

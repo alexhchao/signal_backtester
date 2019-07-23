@@ -79,7 +79,8 @@ all_bts = {f:SignalUnivariateStudy(data_df = df,
 
 #all_bts['vol'].stats.iloc[:,-1]
 
-pd.concat({f:all_bts[f].stats.iloc[:,-1] for f in list_factors[1:]},axis=1)
+all_bts_stats = pd.concat({f:all_bts[f].stats.iloc[:,-1] for f in list_factors[1:]},axis=1)
+all_bts_stats
 
 df
 
