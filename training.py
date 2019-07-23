@@ -32,7 +32,11 @@ sig = SignalUnivariateStudy(data_df = df,
                             factor_name = 'momentum',
                             neutralizer_column = 'sector',
                             order = 'asc',
+                            start_dt = '2008-01-31',
+                            end_dt = '2014-12-31',
                             n = 5)
+
+#sig.IC_time_series.plot(kind='bar')
 
 sharpes = list(sig.stats.loc['sharpe'].values)
 

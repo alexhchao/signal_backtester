@@ -71,8 +71,17 @@ class SignalUnivariateStudy(object):
         -------
 
         """
+        #_df = self.data_df.copy()
 
+        if self.start_dt is not None:
+            _start = self.start_dt
+            print("starting backtest on {}".format(_start))
+            self.data_df = self.data_df.query("date >= @_start ")
 
+        if self.end_dt is not None:
+            _end = self.end_dt
+            print("ending backtest on {}".format(_end))
+            self.data_df = self.data_df.query("date <= @_end ")
         if self.neutralizer_column is not None:
             print("neutralizing factor = {} using {}".format(self.factor_name,
                                                              self.neutralizer_column))
@@ -115,18 +124,37 @@ class SignalUnivariateStudy(object):
 
         self.wealth = np.cumprod(1 + self.rets)
 
+    @property
+    def IC_time_series(self):
+        """
+        calculate time series of IC 
+
+        Parameters
+        ----------
+        factor_name
+
+        Returns
+        -------
+        dataframe
+        """
+        return self.data_df.groupby(self.date_col_name)[
+            [self.factor_name, self.fwd_return_col_name]].apply(
+            lambda x: x.corr('spearman').iloc[0, 1])
+
+    @property
+    def IC_avg(self):
+        return self.IC_time_series.mean()
 
     def __repr__(self):
         return("""
 SignalUnivariateStudy object
 ============================
 fields = [stats, rets, wealth]
+avg IC = {}
 
 {}
-        """.format(self.stats))
-
-
-
+        """.format(self.IC_avg,
+                   self.stats))
 
 
 
