@@ -34,6 +34,25 @@ for date_range in date_generator:
 
     _df
 
+###################
+df = random_df(n=5,
+              start = '2000-12-31',
+              end = '2001-12-31',
+              freq = 'BM',
+              min_value = -1,
+              max_value = 1,
+              insert_nulls = True,
+              int_df = False,
+              null_percentage = .4)
+
+
+mean = 1000
+std = 10
+
+df
+fill_in_na_with_random_values(df, mean=1000)
+
+
 
 ##################
 

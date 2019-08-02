@@ -10,6 +10,98 @@ def check_if_matrix_has_nans(m):
     return np.any(np.isnan(m))
 
 
+def fill_in_na_with_random_values(df,
+                                  mean=0,
+                                  std=1):
+    """
+    fill in na values in a df with random values (diff values per random value)
+
+    Parameters
+    ----------
+    df
+    mean
+    std
+
+    Returns
+    -------
+
+    """
+    _df = df.copy()
+
+    rand_df = pd.DataFrame(np.random.randn(df.shape[0],
+                                           df.shape[1]) * std + mean,
+                           columns=df.columns,
+                           index=df.index)
+    _df.update(rand_df, overwrite=False)
+    return _df
+
+
+
+def random_df(n=10,
+              start = '2000-12-31',
+              end = '2001-12-31',
+              freq = 'BM',
+              min_value = -1,
+              max_value = 1,
+              insert_nulls = True,
+              int_df = False,
+              null_percentage = .2):
+    """
+    
+    Parameters
+    ----------
+    n - number of rows in df
+    start - start dt
+    end - end dt
+    freq - 'BM' or 'BA', etc
+    min_value - -1
+    max_value - 1
+    insert_nulls - insert random nas
+    int_df - make everything float
+    null_percentage - what percentage of nulls u would like 
+
+    Returns
+    -------
+    df
+
+    """
+    dt_rng = pd.date_range(start = start,
+                           end = end,
+                           freq =freq)
+    gvkeys = [str(x).zfill(3) for x in range(n)]
+
+    d = len(dt_rng)
+
+    df = pd.DataFrame(data = np.random.uniform(min_value, max_value, size = (d,n)))
+
+    df.index.name = 'date'
+    df.columns.name = 'gvkey'
+
+    if insert_nulls:
+        return df.mask(np.random.random(df.shape) < null_percentage)
+
+    if int_df:
+        df = df.astype(int)
+
+    return df
+
+
+
+def get_first_date_where_col_not_null(df, col):
+    """
+
+    Parameters
+    ----------
+    df
+    col
+
+    Returns
+    -------
+
+    """
+    cnts = df.groupby('date')[col].count()
+    return cnts[cnts > 0].index[0]
+
 def normalize(x):
     """
     percentile rank than inverse normal dist
