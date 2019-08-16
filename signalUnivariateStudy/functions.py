@@ -6,6 +6,49 @@ import sys
 from scipy.stats import zscore
 from scipy.stats import norm
 
+
+def fill_in_na_with_random_values(df,
+                                  mean=0,
+                                  std=1):
+    """
+    fill in na values in a df with random values (diff values per random value)
+    Parameters
+    ----------
+    df
+    mean
+    std
+    Returns
+    -------
+    """
+    _df = df.copy()
+
+    rand_df = pd.DataFrame(np.random.randn(df.shape[0],
+                                           df.shape[1]) * std + mean,
+                           columns=df.columns,
+                           index=df.index)
+    _df.update(rand_df, overwrite=False)
+    return _df
+
+
+
+def output_to_xlsx(dict_of_dfs,
+                   filename):
+    """
+    output dictionary of dataframes to excel
+    Parameters
+    ----------
+    d
+
+    Returns
+    -------
+
+    """
+    writer = pd.ExcelWriter(filename)
+    for name, df in dict_of_dfs.items():
+        df.to_excel(writer, name)
+    writer.save()
+
+
 def check_if_matrix_has_nans(m):
     return np.any(np.isnan(m))
 
