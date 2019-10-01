@@ -3,6 +3,7 @@
 import numpy as np
 import pandas as pd
 import datetime
+from natsort import natsorted
 from signalUnivariateStudy.functions import calc_stats, add_quintiles_as_new_col, add_sector_neutral_column
 
 
@@ -283,8 +284,16 @@ class SignalUnivariateStudy(object):
                                        'order',
                                        'n_buckets'
                                        ])
+        #import pdb; pdb.set_trace()
 
+        #if self.n >= 10:
+            #new_cols = [str(x) for x in np.arange(1,11)] + [_stats.columns[-1]]
+
+            #_stats.columns = pd.Categorical(_stats.columns,
+            #                          new_cols )
+        _stats = _stats.reindex(columns=natsorted(_stats.columns))
         _stats = _stats.reindex(_stats.index.sort_values())
+
         return _stats
 
     @property
