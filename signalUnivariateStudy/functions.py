@@ -331,30 +331,40 @@ def calc_sharpe(x,
     return x.mean() * np.sqrt(n) / x.std()
 
 
+def computeMaxDrawDown(wealth,
+                       max_only = True):
+    #cum_returns = (1 + returns).cumprod()
+    drawdown = 1 - wealth.div(wealth.cummax())
+    if max_only:
+        return drawdown.max(axis=0)
+    else:
+        return drawdown
+
 def calc_stats(_ret_series,
                n=12  # for monthly
                ):
     """
-
     Parameters
     ----------
     _ret_series
-
     Returns
     -------
-
     """
     _stats = {}
 
     adj_factor = np.sqrt(n)
     num_obs = _ret_series.shape[0]
 
+    _wealth = np.cumprod(1 + _ret_series)
+    _wealth.iloc[0] = 1 # start off at 1
+
     _stats['rets'] = _ret_series.mean() * n
     _stats['vol'] = _ret_series.std() * adj_factor
     _stats['sharpe'] = _stats['rets'] / _stats['vol']
     _stats['tstat'] = _stats['sharpe'] * np.sqrt(num_obs) / adj_factor
-    _stats['start_dt'] = _ret_series.index[0]
-    _stats['end_dt'] = _ret_series.index[-1]
+    _stats['start_dt'] = _ret_series.index[0].strftime('%Y-%m-%d')
+    _stats['end_dt'] = _ret_series.index[-1].strftime('%Y-%m-%d')
+    _stats['maxDD'] = computeMaxDrawDown(_wealth, max_only = True)
     # import pdb; pdb.set_trace()
     return _stats
 

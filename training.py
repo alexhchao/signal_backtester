@@ -30,7 +30,7 @@ df = pd.read_csv('data/stock_data_actual_dates.csv').iloc[:,1:]
 
 sig = SignalUnivariateStudy(data_df = df,
                             factor_name = 'momentum',
-                            neutralizer_column = 'sector',
+                            #neutralizer_column = 'sector',
                             order = 'asc',
                             start_dt = '2008-01-31',
                             end_dt = '2014-12-31',
@@ -39,6 +39,7 @@ sig = SignalUnivariateStudy(data_df = df,
 #sig.IC_time_series.plot(kind='bar')
 
 sharpes = list(sig.stats.loc['sharpe'].values)
+sharpes
 
 mom_q5_sharpes = [0.4335993828993728, 0.629807334232841, 0.736147030627279,
        0.7806338800155603, 0.7417751759348701, 0.08860064205960581]
@@ -89,6 +90,29 @@ all_bts_stats
 df
 
 all_bts['size'].wealth.plot()
+
+list_factors = ['sector', 'momentum', 'quality', 'growth', 'vol', 'value', 'size']
+
+df = pd.read_csv('../data/stock_data_actual_dates.csv').iloc[:, 1:]
+
+sig = SignalUnivariateStudy(data_df=df,
+                            factor_name='momentum',
+                            neutralizer_column='sector',
+                            order='asc',
+                            n=5)
+print(sig.stats)
+
+sharpes = list(sig.stats.loc['sharpe'].values)
+
+mom_q5_sharpes = [0.4335993828993728, 0.629807334232841, 0.736147030627279,
+                  0.7806338800155603, 0.7417751759348701, 0.08860064205960581]
+
+assert (sharpes == mom_q5_sharpes)
+
+self.assertEqual(sharpes, mom_q5_sharpes,
+                 "sharpes for momentum q5 sector neutral dont match!")
+
+
 
 
 ############################
