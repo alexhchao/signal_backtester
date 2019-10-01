@@ -30,11 +30,19 @@ df = pd.read_csv('data/stock_data_actual_dates.csv').iloc[:,1:]
 
 sig = SignalUnivariateStudy(data_df = df,
                             factor_name = 'momentum',
-                            #neutralizer_column = 'sector',
+                            stock_col_name = 'stock',
+                            neutralizer_column = 'sector',
                             order = 'asc',
-                            start_dt = '2008-01-31',
-                            end_dt = '2014-12-31',
-                            n = 5)
+                            start_dt = '2006-01-31',
+                            end_dt = '2015-12-31',
+                            n = 10)
+sig.dates
+
+sig.freq
+sig.annualizationFactor
+sig.stats
+
+list(sig.data_df.date.unique())
 
 #sig.IC_time_series.plot(kind='bar')
 

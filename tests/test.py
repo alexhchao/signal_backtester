@@ -24,6 +24,7 @@ class TestSum(unittest.TestCase):
 
         sig = SignalUnivariateStudy(data_df=df,
                                     factor_name='momentum',
+                                    stock_col_name = 'stock',
                                     neutralizer_column='sector',
                                     order='asc',
                                     n=5)
