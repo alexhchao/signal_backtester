@@ -8,7 +8,7 @@ sns.set()
 
 pd.options.display.max_rows = 15
 pd.options.display.max_columns = 15
-pd.set_option("display.width",150)
+pd.set_option("display.width",120)
 
 from signalUnivariateStudy.SignalUnivariateStudy import SignalUnivariateStudy
 
@@ -26,6 +26,27 @@ df = pd.read_csv('data/stock_data_actual_dates.csv').iloc[:,1:]
 #############################
 # start here
 ############################
+momentum_df = df.set_index(['date','stock']).momentum.unstack()
+
+#pd.to_datetime(momentum_df.index)
+
+mom_sig = Signal(df = momentum_df,
+                 name = 'momentum')
+
+const = Constituents(df = df.set_index(['date','stock']).returns.unstack())
+
+const.const
+const
+
+port = Portfolio(df = df.set_index(['date','stock']).returns.unstack())
+port.weights
+
+const.const[const.const.notnull()] = 1.0
+
+mom_sig
+
+rets = Rets(df = df.set_index(['date','stock']).returns.unstack())
+rets
 
 
 sig = SignalUnivariateStudy(data_df = df,
@@ -41,6 +62,13 @@ sig.dates
 sig.freq
 sig.annualizationFactor
 sig.stats
+
+################
+# calc turnover
+################
+
+sig.data_df
+
 
 list(sig.data_df.date.unique())
 

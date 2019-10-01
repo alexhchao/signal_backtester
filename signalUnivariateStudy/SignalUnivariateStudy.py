@@ -76,12 +76,171 @@ def getFrequency(list_dates):
     out = abs(d - d0).sort_values(by=0).index[0]
     return out
 
-class Factor(object):
+
+
+class Signal(object):
     """
     
     """
-    pass
-    #raise NotImplementedError()
+    def __init__(self,
+                 df,
+                 name = 'unnamed_factor',
+                 direction = 'asc',
+                 date_col_name = 'date',
+                 stock_col_name = 'stock'):
+        """
+        
+        Parameters
+        ----------
+        df
+        name
+        direction
+        date_col_name
+        stock_col_name
+        """
+        self.signal = df
+        self.name = name
+        self.direction = direction
+        self.date_col_name = date_col_name
+        self.stock_col_name = stock_col_name
+
+    @property
+    def dates(self):
+        return pd.to_datetime(self.signal.index)
+
+    @property
+    def coverage(self):
+        return self.signal.count(axis=1)
+
+    @property
+    def median_coverage(self):
+        return self.signal.count(axis=1).median()
+
+    @property
+    def start_date(self):
+        return self.dates[0].strftime("%Y-%m-%d")
+
+    @property
+    def end_date(self):
+        return self.dates[-1].strftime("%Y-%m-%d")
+
+    @property
+    def freq(self):
+        return getFrequency(self.dates)
+
+    def __repr__(self):
+        return("""
+        [Signal]
+        {}
+        -------------------------------------
+        Dates: {} dates, from {} to {}, every {}
+        Median Coverage: {} stocks
+        Direction: {}
+        """.format(
+            self.name,
+            self.signal.shape[0],
+            self.start_date,
+            self.end_date,
+            self.freq,
+            self.median_coverage,
+            self.direction
+        ))
+
+
+class Rets(Signal):
+
+    #def __init__(self,
+    #             df):
+    #    super().__init__(df)
+
+    @property
+    def returns(self):
+        return self.signal
+
+    @returns.setter
+    def returns(self, df):
+        self.signal = df
+
+    def __repr__(self):
+        return("""
+        [Rets]
+        {}
+        -------------------------------------
+        Dates: {} dates, from {} to {}, every {}
+        Median Coverage: {} stocks
+        """.format(
+            self.name,
+            self.signal.shape[0],
+            self.start_date,
+            self.end_date,
+            self.freq,
+            self.median_coverage,
+        ))
+
+
+
+class Constituents(Signal):
+
+    def __init__(self,
+                 df):
+        super().__init__(df)
+        self.const = df
+        print("setting constituents to be 1 or Null")
+        self.signal[self.signal.notnull()] = 1.0
+
+    #@property
+    #def const(self):
+    #    return self.signal
+
+    #@const.setter
+    #def const(self, df):
+    #    self.signal = df
+    #    print("setting constituents to be 1 or Null")
+    #    self.signal[self.signal.notnull()] = 1.0
+
+    def __repr__(self):
+        return("""
+        [Constituents]
+        {}
+        -------------------------------------
+        Dates: {} dates, from {} to {}, every {}
+        Median Coverage: {} stocks
+        """.format(
+            self.name,
+            self.signal.shape[0],
+            self.start_date,
+            self.end_date,
+            self.freq,
+            self.median_coverage,
+        ))
+
+
+class Portfolio(Signal):
+
+    def __init__(self,
+                 df,
+                 weight_scheme='equal'):
+        super().__init__(df)
+        self.weights = df
+        self.weight_scheme = weight_scheme
+
+    def __repr__(self):
+        return("""
+        [Portfolio]
+        {}
+        -------------------------------------
+        Dates: {} dates, from {} to {}, every {}
+        Median Coverage: {} stocks
+        Weight Scheme: {}
+        """.format(
+            self.name,
+            self.weights.shape[0],
+            self.start_date,
+            self.end_date,
+            self.freq,
+            self.median_coverage,
+            self.weight_scheme
+        ))
 
 
 class SignalUnivariateStudy(object):
