@@ -297,7 +297,7 @@ class SignalUnivariateStudy(object):
 
     @property
     def dates(self):
-        return list(pd.to_datetime(self.data_df.date.unique()))
+        return list(pd.to_datetime(self.data_df[self.date_col_name].unique()))
 
     @property
     def freq(self):
@@ -318,29 +318,34 @@ class SignalUnivariateStudy(object):
         if self.start_dt is not None:
             _start = self.start_dt
             print("starting backtest on {}".format(_start))
-            self.data_df = self.data_df.query("date >= @_start ")
+            #self.data_df = self.data_df.query("date >= @_start ")
+            #import pdb; pdb.set_trace()
+            self.data_df = self.data_df[self.data_df[self.date_col_name] >= _start]
 
         if self.end_dt is not None:
             _end = self.end_dt
             print("ending backtest on {}".format(_end))
-            self.data_df = self.data_df.query("date <= @_end ")
+            #self.data_df = self.data_df.query("date <= @_end ")
+            self.data_df = self.data_df[self.data_df[self.date_col_name] <= _end]
+
         if self.neutralizer_column is not None:
             print("neutralizing factor = {} using {}".format(self.factor_name,
                                                              self.neutralizer_column))
-            self.data_df = add_sector_neutral_column(df=self.data_df,
+            self.data_df = self.add_sector_neutral_column(df=self.data_df,
                                        col_to_neutralize= self.factor_name,
                                        neutralized_col_name= None,
-                                       agg_col_names=['date', self.neutralizer_column])
+                                       agg_col_names=[self.date_col_name,
+                                                      self.neutralizer_column])
 
 
-            df_2 = add_quintiles_as_new_col(df = self.data_df,
+            df_2 = self.add_quintiles_as_new_col(df = self.data_df,
                                             col_name= '{}_SN'.format(self.factor_name),
                                             new_col_name=None,
                                             groupby_col_name=self.date_col_name,
                                             n=self.n)
             self.factor_col_q_name = '{}_SN_q'.format(self.factor_name)
         else:
-            df_2 = add_quintiles_as_new_col(df=self.data_df,
+            df_2 = self.add_quintiles_as_new_col(df=self.data_df,
                                             col_name='{}'.format(self.factor_name),
                                             new_col_name=None,
                                             groupby_col_name=self.date_col_name,
@@ -516,6 +521,34 @@ class SignalUnivariateStudy(object):
         _df[new_col_name].replace('nan', np.NaN, inplace=True)
 
         return _df
+
+    def add_sector_neutral_column(self,
+                                  df,
+                                  col_to_neutralize,
+                                  neutralized_col_name=None,
+                                  agg_col_names=['date', 'sector']):
+        """
+
+        Parameters
+        ----------
+        df
+        agg_col_names
+
+        Returns
+        -------
+
+        """
+        _df = df.copy()
+
+        if neutralized_col_name is None:
+            neutralized_col_name = '{}_SN'.format(col_to_neutralize)
+
+        #_df[neutralized_col_name] = _df.groupby(['date', 'sector'])[col_to_neutralize].rank(pct=True)
+        _df[neutralized_col_name] = _df.groupby(
+            agg_col_names)[col_to_neutralize].rank(pct=True)
+
+        return _df
+
 
     @property
     def IC_avg(self):

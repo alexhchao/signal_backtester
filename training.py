@@ -57,6 +57,8 @@ sig = SignalUnivariateStudy(data_df = df,
                             start_dt = '2006-01-31',
                             end_dt = '2015-12-31',
                             n = 10)
+sig
+
 sig.dates
 
 sig.freq
