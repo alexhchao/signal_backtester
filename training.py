@@ -57,7 +57,13 @@ sig = SignalUnivariateStudy(data_df = df,
                             start_dt = '2006-01-31',
                             end_dt = '2015-12-31',
                             n = 10)
-sig
+sig.stats_one_liner
+
+meta_stats = sig.stats.T.loc['1',['start_dt','end_dt','freq','order','n_buckets']]
+pd.concat([sig.stats_one_liner,
+           meta_stats],
+          axis = 0)
+
 
 sig.dates
 

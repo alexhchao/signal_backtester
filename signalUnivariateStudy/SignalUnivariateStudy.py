@@ -461,6 +461,26 @@ class SignalUnivariateStudy(object):
         return _stats
 
     @property
+    def stats_one_liner(self):
+        """
+        
+        Returns
+        -------
+
+        """
+        _stats_brief = self.stats.iloc[0,:]
+        _stats_brief['LS - sharpe'] = self.stats.iloc[:,-1].sharpe
+        _stats_brief['LS - tstat'] = self.stats.iloc[:, -1].tstat
+        _stats_brief['LS - maxDD'] = self.stats.iloc[:, -1].maxDD
+
+        meta_stats = self.stats.T.loc['1', ['start_dt', 'end_dt', 'freq', 'order', 'n_buckets']]
+        _stats_brief = pd.concat([_stats_brief,
+                   meta_stats],
+                  axis=0)
+
+        return _stats_brief
+
+    @property
     def portfolios(self):
         """
 
