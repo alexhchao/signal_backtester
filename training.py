@@ -250,6 +250,9 @@ pd.DataFrame(all_ts).T.plot()
 
 pd.Series(all_rsqrs).plot()
 ###########################################
+# event study
+i=1
+f'_{i}_'
 
 
 
@@ -259,7 +262,10 @@ pd.Series(all_rsqrs).plot()
 
 
 
-###########################################
+
+
+
+        ###########################################
 
 
 help(sm.RegressionResults)
