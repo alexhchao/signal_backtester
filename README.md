@@ -101,23 +101,9 @@ We can also easily print the returns and wealth curve for this backtest
 bt.rets.tail()
 ```
 
-
-
+We can also view the trading stats for each quintile portfolio
 
 <div>
-<style>
-    .dataframe thead tr:only-child th {
-        text-align: right;
-    }
-
-    .dataframe thead th {
-        text-align: left;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
