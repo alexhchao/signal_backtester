@@ -20,17 +20,6 @@ from signalUnivariateStudy.SignalUnivariateStudy import SignalUnivariateStudy
 Let's import some factor data
 
 
-```python
-os.getcwd()
-```
-
-
-
-
-    '/Users/Suji/Alex One Drive/OneDrive/github/python/signal_backtester'
-
-
-
 
 ```python
 list_factors = ['sector', 'momentum', 'quality', 'growth', 'vol', 'value', 'size']
