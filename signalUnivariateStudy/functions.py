@@ -3,9 +3,81 @@ import pandas as pd
 import numpy as np
 import os
 import sys
+import datetime
 from scipy.stats import zscore
 from scipy.stats import norm
 
+
+def computeMaxDrawDown(wealth,
+                       max_only=True):
+    """
+    compute max drawdown given a wealth curve
+
+    Parameters
+    ----------
+    wealth - pd.Series
+    max_only - boolean, if True, return maxDD, else return time series drawdowns
+
+    Returns
+    -------
+    float
+    """
+    drawdown = 1 - wealth.div(wealth.cummax())
+    # return drawdown.max(axis=0)
+    if max_only:
+        return drawdown.max(axis=0)
+    else:
+        return drawdown
+
+
+def getAnnualizationFactor(freq):
+    """
+
+    Parameters
+    ----------
+    freq
+
+    Returns
+    -------
+
+    """
+    if freq == 'month':
+        return 12
+    elif freq == 'day':
+        return 252
+    elif freq == 'week':
+        return 52
+    elif freq == 'quater':
+        return 4
+    else:
+        return 1
+
+
+def getFrequency(list_dates):
+    """
+    get frequency from a list of dates
+
+    Parameters
+    ----------
+    list_dates
+
+    Returns
+    -------
+    string (day, month, quater, week, year)
+
+    """
+    d = pd.Series(list_dates).diff().mean()
+
+    d0 = {'day': datetime.timedelta(days=1),
+          'week': datetime.timedelta(days=7),
+          'month': datetime.timedelta(days=30),
+          'quarter': datetime.timedelta(days=90),
+          'year': datetime.timedelta(days=365)
+          }
+    d0 = pd.DataFrame(d0, index=[0]).T
+
+    out = abs(d - d0).sort_values(by=0).index[0]
+    return out
 
 def fill_in_na_with_random_values(df,
                                   mean=0,

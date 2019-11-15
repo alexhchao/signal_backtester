@@ -1,7 +1,7 @@
-# Signal Backtester
-### by Alex Chao
 
-### Python package used to backtest and analyze univariate L/S signals
+# Signal Univariate Study
+
+### Python package used to analyze univariate signals
 
 
 ```python
@@ -45,18 +45,18 @@ print(df.query("stock == 'S730' ").head())
 ```
 
           stock  sector   mktcap   momentum    quality     growth       vol  \
-    87600  S730     5.0  2600.28   9.725409  10.989148  -85.71429  2.960924
-    87601  S730     5.0  2954.44  28.754772  10.989148  -85.71429  2.866734
-    87602  S730     5.0  2949.78  55.905945  10.989148  -85.71429  2.862670
-    87603  S730     5.0  2994.03  83.528853   8.517243 -114.28571  2.791819
-    87604  S730     5.0  2619.63  58.462116   8.517243 -114.28571  2.580692
-
-              value  fwd_returns    returns dummy_date        date      size
-    87600  3.270610    13.620072        NaN       D000  2006-01-31  7.863374
-    87601  2.878549    -0.157729  13.620072       D001  2006-02-28  7.991064
-    87602  2.883097     1.066351  -0.157729       D002  2006-03-31  7.989486
-    87603  2.227433   -12.504885   1.066351       D003  2006-04-28  8.004376
-    87604  2.545780   -19.964270 -12.504885       D004  2006-05-31  7.870788
+    87600  S730     5.0  2600.28   9.725409  10.989148  -85.71429  2.960924   
+    87601  S730     5.0  2954.44  28.754772  10.989148  -85.71429  2.866734   
+    87602  S730     5.0  2949.78  55.905945  10.989148  -85.71429  2.862670   
+    87603  S730     5.0  2994.03  83.528853   8.517243 -114.28571  2.791819   
+    87604  S730     5.0  2619.63  58.462116   8.517243 -114.28571  2.580692   
+    
+              value  fwd_returns    returns dummy_date        date      size  
+    87600  3.270610    13.620072        NaN       D000  2006-01-31  7.863374  
+    87601  2.878549    -0.157729  13.620072       D001  2006-02-28  7.991064  
+    87602  2.883097     1.066351  -0.157729       D002  2006-03-31  7.989486  
+    87603  2.227433   -12.504885   1.066351       D003  2006-04-28  8.004376  
+    87604  2.545780   -19.964270 -12.504885       D004  2006-05-31  7.870788  
 
 
 Now, lets quickly run the signal univariate backtester. We'll backtest sector-neutralized Momentum
@@ -81,28 +81,28 @@ print(bt.stats)
 ```
 
     momentum_SN_q           1           2           3           4           5  \
-    returns          0.114943    0.127207    0.129813    0.130302    0.131109
-    volatility        0.26509    0.201977    0.176341    0.166918    0.176751
-    sharpe           0.433599    0.629807    0.736147    0.780634    0.741775
-    tstat             1.37116     1.99163      2.3279     2.46858      2.3457
-    maxDD            0.666373    0.545323    0.504372    0.442387    0.491306
-    start_dt       2006-01-31  2006-01-31  2006-01-31  2006-01-31  2006-01-31
-    end_dt         2015-12-31  2015-12-31  2015-12-31  2015-12-31  2015-12-31
-    freq                month       month       month       month       month
-    order                 asc         asc         asc         asc         asc
-    n_buckets               5           5           5           5           5
-
-    momentum_SN_q LS - 5 minus 1
-    returns            0.0161663
-    volatility          0.182462
-    sharpe             0.0886006
-    tstat                0.28018
-    maxDD               0.602826
-    start_dt          2006-01-31
-    end_dt            2015-12-31
-    freq                   month
-    order                    asc
-    n_buckets                  5
+    returns          0.114943    0.127207    0.129813    0.130302    0.131109   
+    volatility        0.26509    0.201977    0.176341    0.166918    0.176751   
+    sharpe           0.433599    0.629807    0.736147    0.780634    0.741775   
+    tstat             1.37116     1.99163      2.3279     2.46858      2.3457   
+    maxDD            0.666373    0.545323    0.504372    0.442387    0.491306   
+    start_dt       2006-01-31  2006-01-31  2006-01-31  2006-01-31  2006-01-31   
+    end_dt         2015-12-31  2015-12-31  2015-12-31  2015-12-31  2015-12-31   
+    freq                month       month       month       month       month   
+    order                 asc         asc         asc         asc         asc   
+    n_buckets               5           5           5           5           5   
+    
+    momentum_SN_q LS - 5 minus 1  
+    returns            0.0161663  
+    volatility          0.182462  
+    sharpe             0.0886006  
+    tstat                0.28018  
+    maxDD               0.602826  
+    start_dt          2006-01-31  
+    end_dt            2015-12-31  
+    freq                   month  
+    order                    asc  
+    n_buckets                  5  
 
 
 We can also easily print the returns and wealth curve for this backtest
